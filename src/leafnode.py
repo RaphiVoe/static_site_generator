@@ -6,7 +6,7 @@ class LeafNode(HTMLNode):
 
     def to_html(self):
         if self.tag == "img":
-            return f"<img src='{self.props['src']}' alt='{self.props['alt']}'/>"
+            return f"<img src=\"{self.props['src']}\" alt=\"{self.props['alt']}\"/>"
         if not self.value:
             raise ValueError("Value cannot be empty")
         if self.tag is None:
