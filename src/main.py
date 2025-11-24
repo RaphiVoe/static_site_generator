@@ -1,13 +1,17 @@
 import os
 import shutil
+import sys
 
-from generator import generate_page, generate_all
+from generator import generate_page, generate_pages_recursive
 from textnode import TextNode, TextType
 
 def main():
-    copy_from_directory("static", "public")
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    copy_from_directory("static", "docs")
     #page = generate_page("content/index.md", "template.html", "public/index.html")
-    generate_all("content", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 
 
