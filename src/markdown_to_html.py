@@ -1,5 +1,4 @@
 from leafnode import LeafNode
-from src import textnode
 from textnode import TextNode, TextType
 from markdown_to_block import markdown_to_block
 from parentnode import ParentNode
@@ -20,7 +19,7 @@ def markdown_to_html_node(markdown):
             case BlockType.CODE:
                 parent_nodes.append(node_from_code(block))
             case BlockType.QUOTE:
-                parent_nodes.extend(node_from_quote(block))
+                parent_nodes.append(node_from_quote(block))
             case BlockType.UNORDERED_LIST:
                 parent_nodes.append(node_from_unordered_list(block))
             case BlockType.ORDERED_LIST:
@@ -48,10 +47,17 @@ def node_from_code(block):
     return ParentNode("pre", [text_node_to_html_node(TextNode(block[3:-3], TextType.CODE))])
 
 def node_from_quote(block):
-    parents = []
+    children = []
     for line in block.splitlines():
-        parents.append(ParentNode("blockquote", text_to_children(line[2:])))
-    return parents
+        gen_children = text_to_children(line[2:])
+        if len(gen_children) == 0:
+            children.append(text_node_to_html_node(TextNode(" ", TextType.TEXT)))
+            continue
+        if len(gen_children) == 1:
+            children.append(gen_children[0])
+            continue
+        children.extend(gen_children)
+    return ParentNode("blockquote", children)
 
 def node_from_unordered_list(block):
     children = []

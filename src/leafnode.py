@@ -5,6 +5,8 @@ class LeafNode(HTMLNode):
         super().__init__(tag=tag, value=value, props=props)
 
     def to_html(self):
+        if self.tag == "img":
+            return f"<img src='{self.props['src']}' alt='{self.props['alt']}'/>"
         if not self.value:
             raise ValueError("Value cannot be empty")
         if self.tag is None:
